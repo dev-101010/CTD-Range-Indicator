@@ -116,7 +116,6 @@
     canEl.style.display = "block";
     canEl.style.pointerEvents = "none";
 
-    // Optionale physikalische Auflösung setzen
     canEl.width = 1000;
     canEl.height = 1000;
 
@@ -240,7 +239,7 @@
 
     let pulseTime = 0;
     function animate() {
-        pulseTime += 0.02; // kleinere Schrittweite = sanftere Animation
+        pulseTime += 0.02;
         drawAll();
         requestAnimationFrame(animate);
     }
