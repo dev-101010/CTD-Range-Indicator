@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         CTD Range Indicator
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/dev-101010/CTD-Range-Indicator
 // @version      0.1
 // @description  Adds new range indicators for CTD
 // @author       dev-101010
