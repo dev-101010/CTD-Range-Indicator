@@ -289,7 +289,8 @@
         possibleTowers,
         mapClosed,
         tileAbandoned,
-        userReservedTile
+        userReservedTile,
+        selectTempTower
     };
 
 })(window);
