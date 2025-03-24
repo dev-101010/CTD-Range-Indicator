@@ -14,6 +14,7 @@
     let pulseTime = 0;
 
     function init(container, canvasElement) {
+        console.log("rangeModul init")
         gridContainer = container;
         canvas = canvasElement;
         ctx = canvas.getContext('2d');
