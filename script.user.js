@@ -6,7 +6,7 @@
 // @author       dev-101010
 // @match        https://www.c-td.de/member/battlefield
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=c-td.de
-// @require      https://raw.githubusercontent.com/dev-101010/CTD-Range-Indicator/refs/heads/main/rangeModul.js
+// @require      https://raw.githubusercontent.com/dev-101010/CTD-Range-Indicator/main/rangeModul.js
 // @grant        none
 // ==/UserScript==
 
