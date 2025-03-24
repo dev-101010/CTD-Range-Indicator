@@ -14,7 +14,6 @@
     let pulseTime = 0;
 
     function init(container, canvasElement) {
-        console.log("rangeModul init")
         gridContainer = container;
         canvas = canvasElement;
         ctx = canvas.getContext('2d');
@@ -70,7 +69,7 @@
         if (tower && tower.type === "normal") {
             const rangeData = data.statsData.find(item => item.name === "range");
             if (rangeData) {
-                const range = calculateStats(rangeData);
+                const range = calculateStats(rangeData) || 2.5;
                 tower.range = range / 2.5;
             }
         }
@@ -93,12 +92,16 @@
 
     function calculateStats(stat) {
         let total = 0;
-        let base = stat.basic + stat.upgrade;
+        let base = stat.basic + stat.upg;
         total += base;
         total += (base * stat.boost * 0.01) || 0;
         total += (base * stat.skill * 0.01) || 0;
         total += (base * stat.buff * 0.01) || 0;
+        total += (base * stat.item * 0.01) || 0;
         total += (base * stat.team * 0.01) || 0;
+        total += (base * stat.res1 * 0.01) || 0;
+        total += (base * stat.res2 * 0.01) || 0;
+        total += (base * stat.res3 * 0.01) || 0;
         return total;
     }
 
