@@ -14,7 +14,7 @@
     let pulseTime = 0;
 
     let reservedTile = null;
-    let possibleTowers = [];
+    let possibleTowerData = [];
     let tempTower = null;
 
     function init(container, canvasElement) {
@@ -88,7 +88,7 @@
     }
 
     function possibleTowers(data) {
-        possibleTowers = data;
+        possibleTowerData = data;
     }
     
     function mapClosed(data) {
@@ -98,14 +98,14 @@
     }
 
     function userReservedTile(data) {
-        possibleTowers = [];
+        possibleTowerData = [];
         reservedTile = {x:data.posX,y:data.posY};
         tempTower = null;
         console.log("userReservedTile",data);
     }
 
     function tileAbandoned(data) {
-        possibleTowers = [];
+        possibleTowerData = [];
         reservedTile = null;
         tempTower = null;
         console.log("tileAbandoned",data);
@@ -121,7 +121,7 @@
 
     function selectTempTower(towerID) {
         if(reservedTile) {
-            const tower = possibleTowers.find(item => item.tower === towerID);
+            const tower = possibleTowerData.find(item => item.tower === towerID);
             if(tower) {
                 const stat = tower.upgrades.find(item => item.name === "range");
                 if(stat) {
