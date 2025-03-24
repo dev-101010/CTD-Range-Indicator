@@ -46,6 +46,10 @@
         window.rangeModul.mapLoaded(data);
     });
 
+    socket.on("mapClosed", (data) => {
+        window.rangeModul.mapClosed(data);
+    });
+
     socket.on("updateUserDetails", (data) => {
         window.rangeModul.updateUserDetails(data);
     });
@@ -68,6 +72,10 @@
 
     socket.on("removeTower", (data) => {
         window.rangeModul.removeTower(data);
+    });
+
+    socket.on("possibleTowers", (data) => {
+        window.rangeModul.possibleTowers(data);
     });
 
     //SOCKEND END
