@@ -78,6 +78,14 @@
         window.rangeModul.possibleTowers(data);
     });
 
+    socket.on("userReservedTile", (data) => {
+        window.rangeModul.userReservedTile(data);
+    });
+
+    socket.on("tileAbandoned", (data) => {
+        window.rangeModul.tileAbandoned(data);
+    });
+
     //SOCKEND END
 
     // ADD CANVAS START
