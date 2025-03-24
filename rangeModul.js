@@ -13,6 +13,10 @@
     let hoveredTile = null;
     let pulseTime = 0;
 
+    let reservedTile = null;
+    let possibleTowers = [];
+    let tempTower = null;
+
     function init(container, canvasElement) {
         gridContainer = container;
         canvas = canvasElement;
@@ -84,7 +88,7 @@
     }
 
     function possibleTowers(data) {
-        console.log("possibleTowers",data);
+        possibleTowers = data;
     }
     
     function mapClosed(data) {
@@ -94,17 +98,40 @@
     }
 
     function userReservedTile(data) {
+        possibleTowers = [];
+        reservedTile = {x:data.posX,y:data.posY};
+        tempTower = null;
         console.log("userReservedTile",data);
     }
 
     function tileAbandoned(data) {
+        possibleTowers = [];
+        reservedTile = null;
+        tempTower = null;
         console.log("tileAbandoned",data);
+        drawAll();
     }
 
     function removeTower(data) {
         const userID = data.user.uid;
         const index = towers.findIndex(item => item.id === userID);
         if (index !== -1) towers.splice(index, 1);
+        drawAll();
+    }
+
+    function selectTempTower(towerID) {
+        if(reservedTile) {
+            const tower = possibleTowers.find(item => item.tower === towerID);
+            if(tower) {
+                const stat = tower.upgrades.find(item => item.name === "range");
+                if(stat) {
+                    let range = stat.value;
+                    const type = tower === 101 ? "buff" : "normal";
+                    if(type === "buff") range = 2;
+                    tempTower = { x: reservedTile.x, y: reservedTile.y, range, type };
+                }
+            }
+        }
         drawAll();
     }
 
@@ -133,6 +160,15 @@
         drawGrid();
 
         const pulse = 0.2 + Math.abs(Math.sin(pulseTime)) * 0.2;
+
+        if(tempTower) {
+            if (tempTower.type === 'normal') {
+                drawTowerRange(tempTower.x, tempTower.y, tempTower.range,
+                    `rgba(255, 80, 80, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
+            } else if (tempTower.type === 'buff') {
+                drawBuffTiles(tempTower, `rgba(255, 255, 0, ${pulse})`);
+            }
+        }
 
         for (const tower of towers) {
             if (tower.own && tower.type === 'normal') {
