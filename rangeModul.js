@@ -84,19 +84,21 @@
     }
 
     function possibleTowers(data) {
-        
+        console.log("possibleTowers",data);
     }
     
     function mapClosed(data) {
-        
+        console.log("mapClosed",data);
+        towers = [];
+        GRID_SIZE = 1
     }
 
     function userReservedTile(data) {
-        
+        console.log("userReservedTile",data);
     }
 
     function tileAbandoned(data) {
-        
+        console.log("tileAbandoned",data);
     }
 
     function removeTower(data) {
