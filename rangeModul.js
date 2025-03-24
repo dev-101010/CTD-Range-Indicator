@@ -89,6 +89,7 @@
 
     function possibleTowers(data) {
         possibleTowerData = data;
+        console.log(data);
     }
     
     function mapClosed(data) {
