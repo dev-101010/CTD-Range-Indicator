@@ -94,23 +94,23 @@
     wrapper.style.boxSizing = "border-box";
 
     // Canvas erstellen
-    const canEl = document.createElement("canvas");
-    canEl.id = "rangeCanvas";
-    canEl.style.width = "100%";
-    canEl.style.height = "100%";
-    canEl.style.display = "block";
-    canEl.style.pointerEvents = "none";
+    const canvas = document.createElement("canvas");
+    canvas.id = "rangeCanvas";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.display = "block";
+    canvas.style.pointerEvents = "none";
 
-    canEl.width = 1000;
-    canEl.height = 1000;
+    canvas.width = 1000;
+    canvas.height = 1000;
 
     // Canvas ins Wrapper-Div
-    wrapper.appendChild(canEl);
+    wrapper.appendChild(canvas);
     // Wrapper ins Parent
     parent.appendChild(wrapper);
 
     // ADD CANVAS END
 
-    rangeModul.init(container, canvas);
+    rangeModul.init(gridContainer, canvas);
 
 })();
