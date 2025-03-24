@@ -88,12 +88,10 @@
     }
 
     function possibleTowers(data) {
-        possibleTowerData = data;
-        console.log(data);
+        possibleTowerData = data.data;
     }
     
     function mapClosed(data) {
-        console.log("mapClosed",data);
         towers = [];
         GRID_SIZE = 1
     }
@@ -102,14 +100,12 @@
         possibleTowerData = [];
         reservedTile = {x:data.posX,y:data.posY};
         tempTower = null;
-        console.log("userReservedTile",data);
     }
 
     function tileAbandoned(data) {
         possibleTowerData = [];
         reservedTile = null;
         tempTower = null;
-        console.log("tileAbandoned",data);
         drawAll();
     }
 
@@ -124,13 +120,12 @@
         if(reservedTile) {
             const tower = possibleTowerData.find(item => item.tower === towerID);
             if(tower) {
+                let range = 0;
+                const type = towerID === 101 ? "buff" : "normal";
+                if(type === "buff") range = 1;
                 const stat = tower.upgrades.find(item => item.name === "range");
-                if(stat) {
-                    let range = stat.value;
-                    const type = tower === 101 ? "buff" : "normal";
-                    if(type === "buff") range = 2;
-                    tempTower = { x: reservedTile.x, y: reservedTile.y, range, type };
-                }
+                if(stat) range = stat.value / 2.5;
+                tempTower = { x: reservedTile.x, y: reservedTile.y, range, type };
             }
         }
         drawAll();
@@ -165,7 +160,7 @@
         if(tempTower) {
             if (tempTower.type === 'normal') {
                 drawTowerRange(tempTower.x, tempTower.y, tempTower.range,
-                    `rgba(255, 80, 80, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
+                    `rgba(255, 255, 0, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
             } else if (tempTower.type === 'buff') {
                 drawBuffTiles(tempTower, `rgba(255, 255, 0, ${pulse})`);
             }
