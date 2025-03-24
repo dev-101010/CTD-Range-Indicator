@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  Adds new range indicators for CTD
 // @author       dev-101010
-// @match        https://www.c-td.de/member/battlefield
+// @match        https://ctddev.shimly-dev.de/member/battlefield
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=c-td.de
 // @require      https://raw.githubusercontent.com/dev-101010/CTD-Range-Indicator/main/rangeModul.js
 // @grant        none
@@ -15,7 +15,7 @@
 
     //SOCKET START (from original script)
 
-    const serverURI = "wss://ctd.drochmann.de:8125";
+    const serverURI = "wss://ctd.drochmann.de:8225";
 
     const socket = io(serverURI, {
         reconnection: true,
