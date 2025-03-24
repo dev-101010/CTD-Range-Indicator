@@ -91,6 +91,14 @@
         
     }
 
+    function userReservedTile(data) {
+        
+    }
+
+    function tileAbandoned(data) {
+        
+    }
+
     function removeTower(data) {
         const userID = data.user.uid;
         const index = towers.findIndex(item => item.id === userID);
@@ -241,7 +249,9 @@
         userTowerBeforeMove,
         removeTower,
         possibleTowers,
-        mapClosed
+        mapClosed,
+        tileAbandoned,
+        userReservedTile
     };
 
 })(window);
