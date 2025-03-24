@@ -10,6 +10,8 @@
 // @grant        none
 // ==/UserScript==
 
+/* globals rangeModul */
+
 (function() {
     'use strict';
 
@@ -45,31 +47,31 @@
     });
 
     socket.on("mapLoaded", (data) => {
-        rangeModul.mapLoaded(data);
+        window.rangeModul.mapLoaded(data);
     });
 
     socket.on("updateUserDetails", (data) => {
-        rangeModul.updateUserDetails(data);
+        window.rangeModul.updateUserDetails(data);
     });
 
     socket.on("userTowerPlaced", (data) => {
-        rangeModul.userTowerPlaced(data);
+        window.rangeModul.userTowerPlaced(data);
     });
 
     socket.on("towerMainValuesChanged", (data) => {
-        rangeModul.towerMainValuesChanged(data);
+        window.rangeModul.towerMainValuesChanged(data);
     });
 
     socket.on("towerStatsValuesChanged", (data) => {
-        rangeModul.towerStatsValuesChanged(data);
+        window.rangeModul.towerStatsValuesChanged(data);
     });
 
     socket.on("userTowerBeforeMove", (data) => {
-        rangeModul.userTowerBeforeMove(data);
+        window.rangeModul.userTowerBeforeMove(data);
     });
 
     socket.on("removeTower", (data) => {
-        rangeModul.removeTower(data);
+        window.rangeModul.removeTower(data);
     });
 
     //SOCKEND END
@@ -111,6 +113,6 @@
 
     // ADD CANVAS END
 
-    rangeModul.init(gridContainer, canvas);
+    window.rangeModul.init(gridContainer, canvas);
 
 })();
