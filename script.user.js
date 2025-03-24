@@ -10,16 +10,12 @@
 // @grant        none
 // ==/UserScript==
 
-/* globals rangeModul */
-
 (function() {
     'use strict';
 
     //SOCKET START (from original script)
 
     const serverURI = "wss://ctd.drochmann.de:8125";
-
-    let userData = null;
 
     const socket = io(serverURI, {
         reconnection: true,
