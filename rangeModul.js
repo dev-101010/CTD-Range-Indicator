@@ -69,7 +69,7 @@
         if (tower && tower.type === "normal") {
             const rangeData = data.statsData.find(item => item.name === "range");
             if (rangeData) {
-                const range = calculateStats(rangeData) || 2.5;
+                const range = calculateStats(rangeData);
                 tower.range = range / 2.5;
             }
         }
@@ -92,7 +92,7 @@
 
     function calculateStats(stat) {
         let total = 0;
-        let base = stat.basic + stat.upg;
+        let base = (stat.basic || 2.5) + (stat.upg || 0);
         total += base;
         total += (base * stat.boost * 0.01) || 0;
         total += (base * stat.skill * 0.01) || 0;
