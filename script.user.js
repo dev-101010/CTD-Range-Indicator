@@ -73,22 +73,6 @@
 
     //SOCKEND END
 
-    // CALC STATS FROM ORIGINAL SCRIPT START
-
-    function calculateStats (basic, upgrade, boost, skill, buff, team) {
-        let total = 0;
-        let base = basic + upgrade;
-        total += base;
-        total += base * boost * 0.01;
-        total += base * skill * 0.01;
-        total += base * buff * 0.01;
-        total += base * team * 0.01;
-
-        return total;
-    }
-
-    // CALC STATS FROM ORIGINAL SCRIPT END
-
     // ADD CANVAS START
 
     const gridContainer = document.getElementById("gridContainer");
@@ -183,7 +167,7 @@
             if(tower.type === "normal") {
                 const rangeData = data.statsData.find((item) => item.name === "range");
                 if(rangeData) {
-                    const range = calculateStats(rangeData.basic, rangeData.upg, rangeData.boost, rangeData.skill, rangeData.buff, rangeData.team);
+                    const range = calculateStats(rangeData);
                     const tower = towers.find((item) => item.id === userID);
                     if(tower) {
                         tower.range = range / 2.5;
@@ -347,6 +331,21 @@
     drawAll();
 
     // DRAWING END
+
+    // FUNKTIONS START
+
+    function calculateStats(stat) {
+        let total = 0;
+        let base = stat.basic + stat.upgrade;
+        total += base;
+        total += (base * stat.boost * 0.01) || 0;
+        total += (base * stat.skill * 0.01) || 0;
+        total += (base * stat.buff * 0.01) || 0;
+        total += (base * stat.team * 0.01) || 0;
+        return total;
+    }
+
+    // FUNCTIONS END
 
     // MOUSE HANDLING START (on gridcontainer because rangeIndicator has no pointerEvents)
 
