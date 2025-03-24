@@ -8,7 +8,7 @@
     let GRID_SIZE = 1;
     let CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
 
-    const towers = [];
+    let towers = [];
     let userData = null;
     let hoveredTile = null;
     let pulseTime = 0;
