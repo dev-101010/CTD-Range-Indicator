@@ -83,6 +83,14 @@
         drawAll();
     }
 
+    function possibleTowers(data) {
+        
+    }
+    
+    function mapClosed(data) {
+        
+    }
+
     function removeTower(data) {
         const userID = data.user.uid;
         const index = towers.findIndex(item => item.id === userID);
@@ -231,7 +239,9 @@
         towerMainValuesChanged,
         towerStatsValuesChanged,
         userTowerBeforeMove,
-        removeTower
+        removeTower,
+        possibleTowers,
+        mapClosed
     };
 
 })(window);
