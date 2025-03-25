@@ -43,46 +43,57 @@
     });
 
     socket.on("mapLoaded", (data) => {
+        console.log("mapLoaded",data);
         window.rangeModul.mapLoaded(data);
     });
 
     socket.on("mapClosed", (data) => {
+        console.log("mapClosed",data);
         window.rangeModul.mapClosed(data);
     });
 
     socket.on("updateUserDetails", (data) => {
+        console.log("updateUserDetails",data);
         window.rangeModul.updateUserDetails(data);
     });
 
     socket.on("userTowerPlaced", (data) => {
+        console.log("userTowerPlaced",data);
         window.rangeModul.userTowerPlaced(data);
     });
 
     socket.on("towerMainValuesChanged", (data) => {
+        console.log("towerMainValuesChanged",data);
         window.rangeModul.towerMainValuesChanged(data);
     });
 
     socket.on("towerStatsValuesChanged", (data) => {
+        console.log("towerStatsValuesChanged",data);
         window.rangeModul.towerStatsValuesChanged(data);
     });
 
     socket.on("userTowerBeforeMove", (data) => {
+        console.log("userTowerBeforeMove",data);
         window.rangeModul.userTowerBeforeMove(data);
     });
 
     socket.on("removeTower", (data) => {
+        console.log("removeTower",data);
         window.rangeModul.removeTower(data);
     });
 
     socket.on("possibleTowers", (data) => {
+        console.log("possibleTowers",data);
         window.rangeModul.possibleTowers(data);
     });
 
     socket.on("userReservedTile", (data) => {
+        console.log("userReservedTile",data);
         window.rangeModul.userReservedTile(data);
     });
 
     socket.on("tileAbandoned", (data) => {
+        console.log("tileAbandoned",data);
         window.rangeModul.tileAbandoned(data);
     });
 
