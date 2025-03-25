@@ -170,7 +170,8 @@
                 drawTowerRange(tempTower.x, tempTower.y, tempTower.range,
                     `rgba(255, 255, 0, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
             } else if (tempTower.type === 'buff') {
-                drawBuffTiles(tempTower, `rgba(255, 255, 0, ${pulse})`);
+                drawBuffTiles(tempTower, `rgba(255, 255, 0, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
+
             }
         }
 
@@ -179,7 +180,8 @@
                 drawTowerRange(tower.x, tower.y, tower.range,
                     `rgba(0, 150, 255, ${pulse})`, `rgba(0, 150, 255, ${pulse + 0.2})`);
             } else if (tower.own && tower.type === 'buff') {
-                drawBuffTiles(tower, `rgba(0, 150, 255, ${pulse})`);
+                drawBuffTiles(tower, `rgba(0, 150, 255, ${pulse})`, `rgba(0, 150, 255, ${pulse + 0.2})`);
+
             }
         }
 
@@ -191,6 +193,7 @@
                         `rgba(255, 80, 80, ${pulse})`, `rgba(255, 80, 80, ${pulse + 0.2})`);
                 } else if (tower.type === 'buff') {
                     drawBuffTiles(tower, `rgba(255, 80, 80, ${pulse})`);
+                    drawBuffTiles(tower, `rgba(255, 80, 80, ${pulse})`, `rgba(255, 80, 80, ${pulse + 0.2})`);
                 }
             }
             drawHoveredTile();
@@ -232,7 +235,7 @@
         ctx.stroke();
     }
 
-    function drawBuffTiles(tower, color) {
+    /*function drawBuffTiles(tower, color) {
         const { x, y, range } = tower;
         ctx.fillStyle = color;
         for (let dx = -range; dx <= range; dx++) {
@@ -248,6 +251,49 @@
                 }
             }
         }
+    }*/
+
+    function drawBuffTiles(tower, fillColor, strokeColor) {
+        const { x, y, range } = tower;
+        ctx.fillStyle = fillColor;
+
+        // Fill buff tiles (ring only)
+        for (let dx = -range; dx <= range; dx++) {
+            for (let dy = -range; dy <= range; dy++) {
+                if (dx === 0 && dy === 0) continue;
+                if (Math.abs(dx) === range || Math.abs(dy) === range) {
+                    const tx = x + dx;
+                    const ty = y + dy;
+                    if (tx >= 0 && ty >= 0 && tx < GRID_SIZE && ty < GRID_SIZE) {
+                        const pos = toCanvasCoord(tx, ty);
+                        ctx.fillRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+        }
+
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 2;
+
+        // Outer border
+        const outerTopLeft = toCanvasCoord(x - range, y + range);
+        const outerBottomRight = toCanvasCoord(x + range, y - range);
+        ctx.strokeRect(
+            outerTopLeft.x * CELL_SIZE,
+            outerTopLeft.y * CELL_SIZE,
+            (outerBottomRight.x - outerTopLeft.x + 1) * CELL_SIZE,
+            (outerBottomRight.y - outerTopLeft.y + 1) * CELL_SIZE
+        );
+
+        // Inner border (immer anzeigen)
+        const innerTopLeft = toCanvasCoord(x - (range - 1), y + (range - 1));
+        const innerBottomRight = toCanvasCoord(x + (range - 1), y - (range - 1));
+        ctx.strokeRect(
+            innerTopLeft.x * CELL_SIZE,
+            innerTopLeft.y * CELL_SIZE,
+            (innerBottomRight.x - innerTopLeft.x + 1) * CELL_SIZE,
+            (innerBottomRight.y - innerTopLeft.y + 1) * CELL_SIZE
+        );
     }
 
     function drawHoveredTile() {
