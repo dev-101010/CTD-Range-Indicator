@@ -125,6 +125,10 @@
 
     // ADD CANVAS END
 
-    window.rangeModul.init(gridContainer, canvas);
+    window.rangeModul.init(gridContainer, canvas, {
+        ownColor: [0, 150, 255],       // z. B. Blau
+        enemyColor: [255, 80, 80],     // z. B. Rot
+        tempColor: [255, 255, 0]       // z. B. Gelb
+    });
 
 })();
