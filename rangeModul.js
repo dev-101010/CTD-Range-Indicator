@@ -17,10 +17,23 @@
     let possibleTowerData = [];
     let tempTower = null;
 
-    function init(container, canvasElement) {
+    let colors = {
+        ownColor: [0, 150, 255],
+        enemyColor: [255, 80, 80],
+        tempColor: [255, 255, 0]
+    };
+
+    let lastFrameTime = 0;
+    const fpsLimit = 20;
+    const frameDuration = 1000 / fpsLimit;
+    let lastTimestamp = performance.now();
+
+    function init(container, canvasElement, colorConfig = {}) {
         gridContainer = container;
         canvas = canvasElement;
         ctx = canvas.getContext('2d');
+
+        colors = { ...colors, ...colorConfig };
 
         gridContainer.addEventListener("mousemove", handleMouseMove);
         gridContainer.addEventListener("mouseleave", handleMouseLeave);
@@ -31,7 +44,6 @@
     function mapLoaded(data) {
         GRID_SIZE = data.map.sizeX;
         CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
-        drawAll();
     }
 
     function updateUserDetails(data) {
@@ -52,7 +64,6 @@
         }
 
         towers.push({ id: userID, x: data.data.posX, y: data.data.posY, range, type, own });
-        drawAll();
     }
 
     function towerMainValuesChanged(data) {
@@ -64,7 +75,6 @@
             tower.type = data.data.tower === 101 ? "buff" : "normal";
             tower.own = userID === userData.uid;
         }
-        drawAll();
     }
 
     function towerStatsValuesChanged(data) {
@@ -77,14 +87,12 @@
                 tower.range = range / 2.5;
             }
         }
-        drawAll();
     }
 
     function userTowerBeforeMove(data) {
         const userID = data.user.uid;
         const index = towers.findIndex(item => item.id === userID);
         if (index !== -1) towers.splice(index, 1);
-        drawAll();
     }
 
     function possibleTowers(data) {
@@ -106,14 +114,12 @@
         possibleTowerData = [];
         reservedTile = null;
         tempTower = null;
-        drawAll();
     }
 
     function removeTower(data) {
         const userID = data.user.uid;
         const index = towers.findIndex(item => item.id === userID);
         if (index !== -1) towers.splice(index, 1);
-        drawAll();
     }
 
     function selectTempTower(towerID) {
@@ -136,7 +142,6 @@
                 tempTower = { x: reservedTile.x, y: reservedTile.y, range, type };
             }
         }
-        drawAll();
     }
 
     function calculateStats(stat) {
@@ -154,10 +159,21 @@
         return total;
     }
 
-    function animate() {
-        pulseTime += 0.02;
-        drawAll();
+    function animate(timestamp) {
+        if (timestamp - lastFrameTime >= frameDuration) {
+            const delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            pulseTime += delta * 1.2; // Geschwindigkeit des Effekts bleibt gleich
+
+            drawAll();
+            lastFrameTime = timestamp;
+        }
         requestAnimationFrame(animate);
+    }
+
+    function rgba(color, alpha) {
+        return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
     }
 
     function drawAll() {
@@ -168,20 +184,18 @@
         if(tempTower) {
             if (tempTower.type === 'normal') {
                 drawTowerRange(tempTower.x, tempTower.y, tempTower.range,
-                    `rgba(255, 255, 0, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
+                               rgba(colors.tempColor, pulse), rgba(colors.tempColor, pulse + 0.2));
             } else if (tempTower.type === 'buff') {
-                drawBuffTiles(tempTower, `rgba(255, 255, 0, ${pulse})`, `rgba(255, 255, 0, ${pulse + 0.2})`);
-
+                drawBuffTiles(tempTower, rgba(colors.tempColor, pulse), rgba(colors.tempColor, pulse + 0.2));
             }
         }
 
         for (const tower of towers) {
             if (tower.own && tower.type === 'normal') {
                 drawTowerRange(tower.x, tower.y, tower.range,
-                    `rgba(0, 150, 255, ${pulse})`, `rgba(0, 150, 255, ${pulse + 0.2})`);
+                               rgba(colors.ownColor, pulse), rgba(colors.ownColor, pulse + 0.2));
             } else if (tower.own && tower.type === 'buff') {
-                drawBuffTiles(tower, `rgba(0, 150, 255, ${pulse})`, `rgba(0, 150, 255, ${pulse + 0.2})`);
-
+                drawBuffTiles(tower, rgba(colors.ownColor, pulse), rgba(colors.ownColor, pulse + 0.2));
             }
         }
 
@@ -190,10 +204,9 @@
             if (tower && !tower.own) {
                 if (tower.type === 'normal') {
                     drawTowerRange(tower.x, tower.y, tower.range,
-                        `rgba(255, 80, 80, ${pulse})`, `rgba(255, 80, 80, ${pulse + 0.2})`);
+                                   rgba(colors.enemyColor, pulse), rgba(colors.enemyColor, pulse + 0.2));
                 } else if (tower.type === 'buff') {
-                    drawBuffTiles(tower, `rgba(255, 80, 80, ${pulse})`);
-                    drawBuffTiles(tower, `rgba(255, 80, 80, ${pulse})`, `rgba(255, 80, 80, ${pulse + 0.2})`);
+                    drawBuffTiles(tower, rgba(colors.enemyColor, pulse), rgba(colors.enemyColor, pulse + 0.2));
                 }
             }
             drawHoveredTile();
@@ -234,24 +247,6 @@
         ctx.lineWidth = 2;
         ctx.stroke();
     }
-
-    /*function drawBuffTiles(tower, color) {
-        const { x, y, range } = tower;
-        ctx.fillStyle = color;
-        for (let dx = -range; dx <= range; dx++) {
-            for (let dy = -range; dy <= range; dy++) {
-                if (dx === 0 && dy === 0) continue;
-                if (Math.abs(dx) === range || Math.abs(dy) === range) {
-                    const tx = x + dx;
-                    const ty = y + dy;
-                    if (tx >= 0 && ty >= 0 && tx < GRID_SIZE && ty < GRID_SIZE) {
-                        const pos = toCanvasCoord(tx, ty);
-                        ctx.fillRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-                    }
-                }
-            }
-        }
-    }*/
 
     function drawBuffTiles(tower, fillColor, strokeColor) {
         const { x, y, range } = tower;
@@ -318,12 +313,10 @@
         const x = Math.floor(offsetX / (rect.width / GRID_SIZE));
         const y = GRID_SIZE - 1 - Math.floor(offsetY / (rect.height / GRID_SIZE));
         hoveredTile = { x, y };
-        drawAll();
     }
 
     function handleMouseLeave() {
         hoveredTile = null;
-        drawAll();
     }
 
     // Public API
