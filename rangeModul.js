@@ -122,9 +122,17 @@
             if(tower) {
                 let range = 0;
                 const type = towerID === 101 ? "buff" : "normal";
-                if(type === "buff") range = 1;
-                const stat = tower.upgrades.find(item => item.name === "range");
-                if(stat) range = stat.value / 2.5;
+
+                if (type === "buff") {
+                    range = tower.skills.includes("supportDoubleRange") ? 2 : 1;
+                }
+                if (type === "normal") {
+                    const rangeData = tower.userTowerStats.find(item => item.name === "range");
+                    if (rangeData) {
+                        const r = calculateStats(rangeData) || 2.5;
+                        range = r / 2.5;
+                    }
+                }
                 tempTower = { x: reservedTile.x, y: reservedTile.y, range, type };
             }
         }
