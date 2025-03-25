@@ -8,12 +8,14 @@
     let GRID_SIZE = 1;
     let CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
 
+    let tiles = [];
+
     let towers = [];
     let userData = null;
     let hoveredTile = null;
     let pulseTime = 0;
 
-    let reservedTile = null;
+    let reservedTiles = [];
     let possibleTowerData = [];
     let tempTower = null;
 
@@ -42,6 +44,7 @@
     }
 
     function mapLoaded(data) {
+        tiles = data.tiles;
         GRID_SIZE = data.map.sizeX;
         CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
     }
@@ -100,19 +103,23 @@
     }
     
     function mapClosed(data) {
+        tiles = [];
         towers = [];
         GRID_SIZE = 1
     }
 
     function userReservedTile(data) {
+        const userID = data.user.uid;
+        const own = userID === userData.uid;
         possibleTowerData = [];
-        reservedTile = {x:data.posX,y:data.posY};
+        reservedTiles.push({x:data.posX,y:data.posY,own});
         tempTower = null;
     }
 
     function tileAbandoned(data) {
         possibleTowerData = [];
-        reservedTile = null;
+        const index = reservedTiles.findIndex(tile => tile.posX === data.posX && tile.posY === data.posY);
+        if (index !== -1) reservedTiles.splice(index, 1);
         tempTower = null;
     }
 
@@ -123,6 +130,7 @@
     }
 
     function selectTempTower(towerID) {
+        const reservedTile = reservedTiles.find(tile => tile.own === true);
         if(reservedTile) {
             const tower = possibleTowerData.find(item => item.tower === towerID);
             if(tower) {
@@ -164,7 +172,7 @@
             const delta = (timestamp - lastTimestamp) / 1000;
             lastTimestamp = timestamp;
 
-            pulseTime += delta * 1.2; // Geschwindigkeit des Effekts bleibt gleich
+            pulseTime += delta * 1.2;
 
             drawAll();
             lastFrameTime = timestamp;
@@ -211,6 +219,7 @@
             }
             drawHoveredTile();
         }
+
     }
 
     function drawGrid() {
@@ -252,7 +261,6 @@
         const { x, y, range } = tower;
         ctx.fillStyle = fillColor;
 
-        // Fill buff tiles (ring only)
         for (let dx = -range; dx <= range; dx++) {
             for (let dy = -range; dy <= range; dy++) {
                 if (dx === 0 && dy === 0) continue;
@@ -270,7 +278,6 @@
         ctx.strokeStyle = strokeColor;
         ctx.lineWidth = 2;
 
-        // Outer border
         const outerTopLeft = toCanvasCoord(x - range, y + range);
         const outerBottomRight = toCanvasCoord(x + range, y - range);
         ctx.strokeRect(
@@ -280,7 +287,6 @@
             (outerBottomRight.y - outerTopLeft.y + 1) * CELL_SIZE
         );
 
-        // Inner border (immer anzeigen)
         const innerTopLeft = toCanvasCoord(x - (range - 1), y + (range - 1));
         const innerBottomRight = toCanvasCoord(x + (range - 1), y - (range - 1));
         ctx.strokeRect(
@@ -293,10 +299,22 @@
 
     function drawHoveredTile() {
         if (!hoveredTile) return;
-        const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
-        ctx.strokeStyle = "rgba(50, 50, 50, 0.3)";
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        const foundTile = tiles.find(tile => tile.tileX === hoveredTile.x && tile.tileY === hoveredTile.y);
+        const foundTower = towers.find(t => t.x === hoveredTile.x && t.y === hoveredTile.y);
+        const foundReserved = reservedTiles.find(t => t.x === hoveredTile.x && t.y === hoveredTile.y);
+        if(foundTile && foundTile.type === "ground" && !foundReserved) {
+            if(foundTower) {
+                const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
+                ctx.strokeStyle = "rgba(100, 0, 0, 1)";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            } else {
+                const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
+                ctx.strokeStyle = "rgba(0, 100, 0, 1)";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            }
+        }
     }
 
     function toCanvasCoord(x, y) {
