@@ -35,8 +35,6 @@
         canvas = canvasElement;
         ctx = canvas.getContext('2d');
 
-        colors = { ...colors, ...colorConfig };
-
         gridContainer.addEventListener("mousemove", handleMouseMove);
         gridContainer.addEventListener("mouseleave", handleMouseLeave);
 
