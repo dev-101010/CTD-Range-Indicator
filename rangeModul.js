@@ -187,7 +187,8 @@
     }
 
     function drawAll() {
-        drawGrid();
+
+        ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
         const pulse = 0.2 + Math.abs(Math.sin(pulseTime)) * 0.2;
 
@@ -222,25 +223,6 @@
             drawHoveredTile();
         }
 
-    }
-
-    function drawGrid() {
-        ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-        ctx.strokeStyle = "#ccc";
-        ctx.lineWidth = 1;
-
-        for (let i = 0; i <= GRID_SIZE; i++) {
-            const pos = i * CELL_SIZE;
-            ctx.beginPath();
-            ctx.moveTo(pos, 0);
-            ctx.lineTo(pos, CANVAS_SIZE);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.moveTo(0, pos);
-            ctx.lineTo(CANVAS_SIZE, pos);
-            ctx.stroke();
-        }
     }
 
     function drawTowerRange(x, y, range, fill, stroke) {
