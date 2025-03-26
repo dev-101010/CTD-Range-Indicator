@@ -22,7 +22,11 @@
     let colors = {
         ownColor: [0, 150, 255],
         enemyColor: [255, 80, 80],
-        tempColor: [255, 255, 0]
+        tempColor: [255, 255, 0],
+        ownHoverColor: [0, 0, 255],
+        enemyHoverColor: [100, 0, 0],
+        tempHoverColor: [0, 150, 255],
+        groundHoverColor: [0, 100, 0]
     };
 
     let lastFrameTime = 0;
@@ -300,10 +304,20 @@
         const foundTile = tiles.find(tile => tile.tileX === hoveredTile.x && tile.tileY === hoveredTile.y);
         const foundTower = towers.find(t => t.x === hoveredTile.x && t.y === hoveredTile.y);
         const foundReserved = reservedTiles.find(t => t.x === hoveredTile.x && t.y === hoveredTile.y);
-        if(foundTile && foundTile.type === "ground" && !foundReserved) {
-            if(foundTower) {
+        if(foundTile && foundTile.type === "ground") {
+            if(foundTower && foundTower.own) {
                 const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
                 ctx.strokeStyle = "rgba(100, 0, 0, 1)";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            } elseif(foundTower) {
+                const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
+                ctx.strokeStyle = "rgba(100, 0, 0, 1)";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            } elseif(foundReserved) {
+                const pos = toCanvasCoord(hoveredTile.x, hoveredTile.y);
+                ctx.strokeStyle = "rgba(0, 150, 255, 1)";
                 ctx.lineWidth = 3;
                 ctx.strokeRect(pos.x * CELL_SIZE, pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             } else {
