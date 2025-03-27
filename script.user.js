@@ -28,6 +28,7 @@
             authToken: authToken
         }
     });
+
     window.addEventListener('beforeunload', () => {
         socket.disconnect();
     });
@@ -38,74 +39,78 @@
         });
         console.log("Connected");
     });
-    socket.on("authSuccess", (data,act) => {
+
+    socket.on("authSuccess", () => {
+        socket.emit("setPage", {
+            page: "battlefield"
+        });
         console.log("Auth success");
     });
 
     socket.on("mapLoaded", (data,act) => {
+        act();
         console.log("mapLoaded",data);
         window.rangeModul.mapLoaded(data);
-        act();
     });
 
     socket.on("mapClosed", (data,act) => {
+        act();
         console.log("mapClosed",data);
         window.rangeModul.mapClosed(data);
-        act();
     });
 
     socket.on("updateUserDetails", (data,act) => {
+        act();
         console.log("updateUserDetails",data);
         window.rangeModul.updateUserDetails(data);
-        act();
     });
 
     socket.on("userTowerPlaced", (data,act) => {
+        act();
         console.log("userTowerPlaced",data);
         window.rangeModul.userTowerPlaced(data);
-        act();
     });
 
     socket.on("towerMainValuesChanged", (data,act) => {
+        act();
         console.log("towerMainValuesChanged",data);
         window.rangeModul.towerMainValuesChanged(data);
-        act();
     });
 
     socket.on("towerStatsValuesChanged", (data,act) => {
+        act();
         console.log("towerStatsValuesChanged",data);
         window.rangeModul.towerStatsValuesChanged(data);
-        act();
     });
 
     socket.on("userTowerBeforeMove", (data,act) => {
+        act();
         console.log("userTowerBeforeMove",data);
         window.rangeModul.userTowerBeforeMove(data);
-        act();
     });
 
     socket.on("removeTower", (data,act) => {
+        act();
         console.log("removeTower",data);
         window.rangeModul.removeTower(data);
-        act();
     });
 
     socket.on("possibleTowers", (data,act) => {
+        act();
         console.log("possibleTowers",data);
         window.rangeModul.possibleTowers(data);
-        act();
     });
 
     socket.on("userReservedTile", (data,act) => {
+        act();
         console.log("userReservedTile",data);
         window.rangeModul.userReservedTile(data);
-        act();
     });
 
     socket.on("tileAbandoned", (data,act) => {
+        act();
         console.log("tileAbandoned",data);
         window.rangeModul.tileAbandoned(data);
-        act();
     });
 
     //SOCKEND END
