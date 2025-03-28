@@ -154,6 +154,10 @@
         }
     }
 
+    function dynBlockChange(data) {
+        // set bockades
+    }
+
     function calculateStats(stat) {
         let total = 0;
         let base = (stat.basic || 2.5) + (stat.upg || 0);
