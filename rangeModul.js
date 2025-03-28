@@ -49,9 +49,9 @@
     function mapLoaded(data) {
         tiles = data.tiles;
         blockedTiles = [];
-        const tempBlocked = data.tile.filter(item => item.bocked === true),
+        const tempBlocked = tiles.filter(item => item.type === "dynamic");
         for(const tempBlock of tempBlocked) {
-            blockedTiles.push(x:tempBlock.xPos, y:tempBlock.yPos, blocked = true;);
+            blockedTiles.push({x : tempBlock.tileX, y : tempBlock.tileY, blocked : true});
         }
         GRID_SIZE = data.map.sizeX;
         CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
@@ -112,8 +112,8 @@
     
     function mapClosed(data) {
         tiles = [];
-        towers = [];
         blockedTiles = [];
+        towers = [];
         GRID_SIZE = 1
     }
 
@@ -143,7 +143,7 @@
         if(reservedTile) {
             const tower = possibleTowerData.find(item => item.tower === towerID);
             if(tower) {
-                let range = 0;
+                let range = 1;
                 const type = towerID === 101 ? "buff" : "normal";
 
                 if (type === "buff") {
@@ -162,9 +162,11 @@
     }
 
     function dynBlockChange(data) {
-        const blockedTile = blockedTiles.find(tile => tile.x === data.x && tile.y ===data.y);
-        if(blockedTile) {
-            blockedTile.blocked = data.blocked;
+        if(data.dynBlockData) {
+            const blockedTile = blockedTiles.find(tile => tile.x === data.dynBlockData.x && tile.y === data.dynBlockData.y);
+            if(blockedTile) {
+                blockedTile.blocked = data.dynBlockData.status;
+            }
         }
     }
 
@@ -359,7 +361,8 @@
         mapClosed,
         tileAbandoned,
         userReservedTile,
-        selectTempTower
+        selectTempTower,
+        dynBlockChange
     };
 
 })(window);
