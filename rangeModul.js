@@ -9,6 +9,7 @@
     let CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
 
     let tiles = [];
+    let blockedTiles = [];
 
     let towers = [];
     let userData = null;
@@ -47,6 +48,11 @@
 
     function mapLoaded(data) {
         tiles = data.tiles;
+        blockedTiles = [];
+        const tempBlocked = data.tile.filter(item => item.bocked === true),
+        for(const tempBlock of tempBlocked) {
+            blockedTiles.push(x:tempBlock.xPos, y:tempBlock.yPos, blocked = true;);
+        }
         GRID_SIZE = data.map.sizeX;
         CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
     }
@@ -107,6 +113,7 @@
     function mapClosed(data) {
         tiles = [];
         towers = [];
+        blockedTiles = [];
         GRID_SIZE = 1
     }
 
@@ -155,7 +162,10 @@
     }
 
     function dynBlockChange(data) {
-        // set bockades
+        const blockedTile = blockedTiles.find(tile => tile.x === data.x && tile.y ===data.y);
+        if(blockedTile) {
+            blockedTile.blocked = data.blocked;
+        }
     }
 
     function calculateStats(stat) {
