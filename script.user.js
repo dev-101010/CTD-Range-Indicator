@@ -113,6 +113,12 @@
         window.rangeModul.tileAbandoned(data);
     });
 
+    socket.on("dynBlockChange", (data,act) => {
+        act();
+        console.log("dynBlockChange",data);
+        window.rangeModul.dynBlockChange(data);
+    });
+
     //SOCKEND END
 
     // ADD CANVAS START
