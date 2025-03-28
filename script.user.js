@@ -124,8 +124,9 @@
     // ADD CANVAS START
 
     const gridContainer = document.getElementById("gridContainer");
+    const canvas = document.getElementById("rangeCanvas");
 
-    // Get the parent of the target element
+    /*/ Get the parent of the target element
     const parent = gridContainer.parentElement;
 
     // Wrapper-Div erstellen
@@ -154,7 +155,7 @@
     // Canvas ins Wrapper-Div
     wrapper.appendChild(canvas);
     // Wrapper ins Parent
-    parent.appendChild(wrapper);
+    parent.appendChild(wrapper);*/
 
     // ADD CANVAS END
 
